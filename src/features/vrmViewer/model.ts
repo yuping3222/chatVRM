@@ -66,6 +66,18 @@ export class Model {
     action.play();
   }
 
+  public async loadClipAnimation(clips: any): Promise<void> {
+    const { vrm, mixer } = this;
+    if (vrm == null || mixer == null) {
+      throw new Error("You have to load VRM first");
+    }
+
+    // const clip = vrmAnimation.createAnimationClip(vrm);
+    // clips.tracks.length =10;
+    const action = mixer.clipAction(clips);
+    action?.play();
+  }
+
   /**
    * 音声を再生し、リップシンクを行う
    */

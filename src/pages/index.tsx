@@ -20,12 +20,15 @@ export default function Home() {
   const { viewer } = useContext(ViewerContext);
 
   const [systemPrompt, setSystemPrompt] = useState(SYSTEM_PROMPT);
-  const [openAiKey, setOpenAiKey] = useState("");
+  const [openAiKey, setOpenAiKey] = useState("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");
   const [koeiromapKey, setKoeiromapKey] = useState("");
   const [koeiroParam, setKoeiroParam] = useState<KoeiroParam>(DEFAULT_PARAM);
   const [chatProcessing, setChatProcessing] = useState(false);
   const [chatLog, setChatLog] = useState<Message[]>([]);
   const [assistantMessage, setAssistantMessage] = useState("");
+
+  const [vrm, setvrm] = useState("/AvatarSample_B.vrm");
+
 
   useEffect(() => {
     if (window.localStorage.getItem("chatVRMParams")) {
@@ -77,15 +80,41 @@ export default function Home() {
    */
   const handleSendChat = useCallback(
     async (text: string) => {
-      if (!openAiKey) {
-        setAssistantMessage("APIキーが入力されていません");
-        return;
-      }
+      // if (!openAiKey) {
+      //   setAssistantMessage("APIキーが入力されていません");
+      //   return;
+      // }
 
       const newMessage = text;
 
       if (newMessage == null) return;
 
+      console.log(newMessage);
+      if (newMessage == "change")
+      {
+        setvrm("/2169834972885118111.vrm");
+        setAssistantMessage("人物已更换");
+
+      //   const messageLog: Message[] = [
+      //     ...chatLog,
+      //     { role: "user", content: newMessage },
+      //   ];
+
+      //   const aiText = `abccccccccc`;
+      //   const aiTalks = textsToScreenplay([aiText], koeiroParam);
+      //   let aiTextLog = "";
+      //   aiTextLog += aiText;
+      //         // アシスタントの返答をログに追加
+      // const messageLogAssistant: Message[] = [
+      //   ...messageLog,
+      //   { role: "assistant", content: aiTextLog },
+      // ];
+
+      // setChatLog(messageLogAssistant);
+
+        return null;
+      }
+    
       setChatProcessing(true);
       // ユーザーの発言を追加して表示
       const messageLog: Message[] = [
@@ -187,13 +216,13 @@ export default function Home() {
   return (
     <div className={"font-M_PLUS_2"}>
       <Meta />
-      <Introduction
+      {/* <Introduction
         openAiKey={openAiKey}
         koeiroMapKey={koeiromapKey}
         onChangeAiKey={setOpenAiKey}
         onChangeKoeiromapKey={setKoeiromapKey}
-      />
-      <VrmViewer />
+      /> */}
+      <VrmViewer vrm={vrm}/>
       <MessageInputContainer
         isChatProcessing={chatProcessing}
         onChatProcessStart={handleSendChat}

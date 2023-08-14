@@ -2,14 +2,28 @@ import { useContext, useCallback } from "react";
 import { ViewerContext } from "../features/vrmViewer/viewerContext";
 import { buildUrl } from "@/utils/buildUrl";
 
-export default function VrmViewer() {
+
+type Props = {
+  vrm: string;
+};
+
+
+export default function VrmViewer({vrm}:Props) {
   const { viewer } = useContext(ViewerContext);
+
+
 
   const canvasRef = useCallback(
     (canvas: HTMLCanvasElement) => {
       if (canvas) {
         viewer.setup(canvas);
-        viewer.loadVrm(buildUrl("/AvatarSample_B.vrm"));
+        if (vrm ==""){
+          viewer.loadVrm(buildUrl("/AvatarSample_B.vrm"));
+        }else
+        {
+          viewer.loadVrm(buildUrl(vrm));
+        }
+        
 
         // Drag and DropでVRMを差し替え
         canvas.addEventListener("dragover", function (event) {
@@ -34,11 +48,16 @@ export default function VrmViewer() {
             const blob = new Blob([file], { type: "application/octet-stream" });
             const url = window.URL.createObjectURL(blob);
             viewer.loadVrm(url);
+          }else if (file_type === 'fbx')
+          {
+            const blob = new Blob([file], { type: "application/octet-stream" });
+            const url = window.URL.createObjectURL(blob);
+            viewer.loadFBX(url);
           }
         });
       }
     },
-    [viewer]
+    [viewer,vrm]
   );
 
   return (

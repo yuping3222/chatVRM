@@ -1,8 +1,15 @@
 import * as THREE from "three";
 import { Model } from "./model";
 import { loadVRMAnimation } from "@/lib/VRMAnimation/loadVRMAnimation";
+
+import { AnimationActionLoopStyles } from 'three';
+
 import { buildUrl } from "@/utils/buildUrl";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+
+import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+import { loadMixamoAnimation } from '@/lib/VRMAnimation/loadMixamoAnimation';
 
 /**
  * three.jsを使った3Dビューワー
@@ -39,6 +46,32 @@ export class Viewer {
     this._clock.start();
   }
 
+  public loadFBX( animationUrl: string ) {
+
+    this._camera = new THREE.PerspectiveCamera( 50.0, window.innerWidth / window.innerHeight, 1, 5000.0 );
+    this._camera.position.set(0, 1.3, 1.5);
+
+    this._cameraControls?.target.set(0, 1.3, 0);
+    this._cameraControls?.update();
+
+
+
+    const vrma : THREE.AnimationClip =  loadMixamoAnimation(animationUrl,this.model?.vrm);
+    // Load animation
+    loadMixamoAnimation( animationUrl, this.model?.vrm ).then( ( vrma:THREE.AnimationClip ) => {
+  
+      // // Apply the loaded animation to mixer and play
+      // this.model?.mixer?.clipAction( vrma ).play();
+  
+        // Apply the loaded animation to mixer and play
+      const action = this.model?.mixer?.clipAction(vrma);
+       action.setLoop(0,THREE.LoopOnce); // 将循环模式设置为只播放一次
+      action.play();
+
+    } );
+  
+  }
+
   public loadVrm(url: string) {
     if (this.model?.vrm) {
       this.unloadVRM();
@@ -58,6 +91,10 @@ export class Viewer {
 
       const vrma = await loadVRMAnimation(buildUrl("/idle_loop.vrma"));
       if (vrma) this.model.loadAnimation(vrma);
+
+      // const vrma = await loadMixamoAnimation(buildUrl("/Breakdance.fbx"),this.model.vrm);
+      // this.model.loadClipAnimation(vrma)
+
 
       // HACK: アニメーションの原点がずれているので再生後にカメラ位置を調整する
       requestAnimationFrame(() => {
