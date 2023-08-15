@@ -28,15 +28,11 @@ export async function getChatResponse(messages: Message[], apiKey: string) {
 
 export async function getChatResponseStream(
   messages: Message[],
-  apiKey: string
 ) {
-  if (!apiKey) {
-    throw new Error("Invalid API Key");
-  }
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${apiKey}`,
+    Authorization: `Bearer ${'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'}`,
   };
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: headers,
@@ -67,6 +63,9 @@ export async function getChatResponseStream(
             .filter((val) => !!val && val.trim() !== "[DONE]");
           for (const chunk of chunks) {
             const json = JSON.parse(chunk);
+            if (json.error) {
+              continue;
+            }
             const messagePiece = json.choices[0].delta.content;
             if (!!messagePiece) {
               controller.enqueue(messagePiece);
