@@ -20,7 +20,7 @@ export default function Home() {
   const { viewer } = useContext(ViewerContext);
 
   const [systemPrompt, setSystemPrompt] = useState(SYSTEM_PROMPT);
-  const [openAiKey, setOpenAiKey] = useState("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");
+  const [openAiKey, setOpenAiKey] = useState("sk-XX");
   const [koeiromapKey, setKoeiromapKey] = useState("");
   const [koeiroParam, setKoeiroParam] = useState<KoeiroParam>(DEFAULT_PARAM);
   const [chatProcessing, setChatProcessing] = useState(false);
@@ -216,12 +216,12 @@ export default function Home() {
   return (
     <div className={"font-M_PLUS_2"}>
       <Meta />
-      {/* <Introduction
+      <Introduction
         openAiKey={openAiKey}
         koeiroMapKey={koeiromapKey}
         onChangeAiKey={setOpenAiKey}
         onChangeKoeiromapKey={setKoeiromapKey}
-      /> */}
+      />
       <VrmViewer vrm={vrm}/>
       <MessageInputContainer
         isChatProcessing={chatProcessing}
@@ -242,7 +242,7 @@ export default function Home() {
         handleClickResetSystemPrompt={() => setSystemPrompt(SYSTEM_PROMPT)}
         onChangeKoeiromapKey={setKoeiromapKey}
       />
-      <GitHubLink />
+      {/* <GitHubLink /> */}
     </div>
   );
 }

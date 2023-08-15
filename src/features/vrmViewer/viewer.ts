@@ -58,17 +58,17 @@ export class Viewer {
 
     const vrma : THREE.AnimationClip =  loadMixamoAnimation(animationUrl,this.model?.vrm);
     // Load animation
-    loadMixamoAnimation( animationUrl, this.model?.vrm ).then( ( vrma:THREE.AnimationClip ) => {
+    // loadMixamoAnimation( animationUrl, this.model?.vrm ).then( ( vrma:THREE.AnimationClip ) => {
   
       // // Apply the loaded animation to mixer and play
       // this.model?.mixer?.clipAction( vrma ).play();
   
         // Apply the loaded animation to mixer and play
-      const action = this.model?.mixer?.clipAction(vrma);
-       action.setLoop(0,THREE.LoopOnce); // 将循环模式设置为只播放一次
-      action.play();
+      // const action = this.model?.mixer?.clipAction(vrma);
+      //  action.setLoop(0,THREE.LoopOnce); // 将循环模式设置为只播放一次
+      // action.play();
 
-    } );
+    // } );
   
   }
 
